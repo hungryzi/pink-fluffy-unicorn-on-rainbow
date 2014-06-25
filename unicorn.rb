@@ -36,11 +36,53 @@ def clear
   print "\e[H\e[2J"
 end
 
+def ascii_unicorn
+  if @time % 10 > 5
+    [
+      "          /| ",
+      " ~～～～~/ | ",
+      "|       O  O ",
+      "|         ∇ |",
+      " ~~~~∪∪~~~∪∪ "
+    ]
+  else
+    [
+      "          /| ",
+      " ～～～～/ | ",
+      "|       ⌒  ⌒ ",
+      "|         ∇ |",
+      " ~~∪∪~~~∪∪~~ "
+    ]
+  end
+end
+
+def pinkify(string)
+  "\e[35;5;35m#{string}\e[0m"
+end
+
+def pink_unicorn
+  ascii_unicorn.map{ |line| pinkify(line) }
+end
+
+def unicorn_width
+  ascii_unicorn.first.size
+end
+
+def unicorn
+  pink_unicorn.map do |line|
+    puts " " * ((terminal_width - unicorn_width) / 2).floor + \
+    line + \
+    " " * ((terminal_width - unicorn_width) / 2).ceil
+  end
+end
+
 @time = 0
 loop do
   @time += 1
 
   clear
+
+  unicorn
   rainbow
   puts "Press Ctrl-C to exit..."
 
