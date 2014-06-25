@@ -5,10 +5,11 @@ end
 def rainbow
   5.times do |row|
     terminal_width.times do |col|
-      if col.odd?
-        print rainbowify("_", col)
+      rainbow_index = @time + col
+      if rainbow_index.odd?
+        print rainbowify("_", rainbow_index)
       else
-        print rainbowify("-", col)
+        print rainbowify("-", rainbow_index)
       end
     end
     print "\n"
@@ -31,5 +32,18 @@ def colors
   end
 end
 
-rainbow
+def clear
+  print "\e[H\e[2J"
+end
+
+@time = 0
+loop do
+  @time += 1
+
+  clear
+  rainbow
+  puts "Press Ctrl-C to exit..."
+
+  sleep 0.1
+end
 
