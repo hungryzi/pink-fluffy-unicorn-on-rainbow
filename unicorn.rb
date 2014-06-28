@@ -76,16 +76,44 @@ def unicorn
   end
 end
 
-@time = 0
-loop do
-  @time += 1
-
-  clear
-
-  unicorn
-  rainbow
-  puts "Press Ctrl-C to exit..."
-
-  sleep 0.1
+def pink_fluffy_unicorn_mp3
+  File.expand_path('../fluffy_unicorn.mp3', __FILE__)
 end
+
+def kill_music
+  system("killall -9 afplay &>/dev/null")
+end
+
+music = Thread.new do
+  loop do
+    `afplay #{pink_fluffy_unicorn_mp3} &`
+    sleep 97
+  end
+end
+
+graphic = Thread.new do
+  @time = 0
+  loop do
+    @time += 1
+
+    clear
+
+    unicorn
+    rainbow
+    puts "Press Ctrl-C to exit..."
+
+    sleep 0.1
+  end
+end
+
+trap "SIGINT" do
+  puts "Exiting"
+  kill_music
+
+  graphic.kill
+  music.kill
+end
+
+music.join
+graphic.join
 
